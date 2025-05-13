@@ -1,7 +1,7 @@
 
 import { DoctorCategory } from '@/data/mockData';
 import { cn } from '@/lib/utils';
-import { Heart, Stethoscope, Eye, Baby, HeartPulse, Activity } from 'lucide-react';
+import { Heart, Stethoscope, Eye, Baby, HeartPulse, Activity, Brain, Bone } from 'lucide-react';
 
 interface CategoryCardProps {
   category: DoctorCategory;
@@ -16,6 +16,9 @@ const iconMap: Record<string, React.ElementType> = {
   baby: Baby,
   'heart-pulse': HeartPulse,
   allergens: Heart,
+  brain: Brain,
+  bone: Bone,
+  female: Heart,
 };
 
 const CategoryCard = ({ category, isSelected, onClick }: CategoryCardProps) => {

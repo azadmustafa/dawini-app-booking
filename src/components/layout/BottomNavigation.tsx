@@ -1,5 +1,5 @@
 
-import { Home, Search, Calendar, User } from 'lucide-react';
+import { Home, Search, Calendar, User, Menu } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
@@ -11,7 +11,8 @@ const BottomNavigation = () => {
     { path: '/', icon: Home, label: 'الرئيسية' },
     { path: '/search', icon: Search, label: 'البحث' },
     { path: '/appointments', icon: Calendar, label: 'المواعيد' },
-    { path: '/profile', icon: User, label: 'حسابي' },
+    { path: '/qa', icon: User, label: 'استشارات' },
+    { path: '/menu', icon: Menu, label: 'القائمة' },
   ];
 
   return (
@@ -24,14 +25,14 @@ const BottomNavigation = () => {
             to={item.path}
             className={cn(
               "flex flex-col items-center justify-center flex-1",
-              isActive ? "text-medical-600" : "text-gray-500"
+              isActive ? "text-medical-500" : "text-gray-500"
             )}
           >
             <item.icon
               size={20}
               className={cn(
                 "mb-1",
-                isActive ? "text-medical-600" : "text-gray-500"
+                isActive ? "text-medical-500" : "text-gray-500"
               )}
             />
             <span className="text-xs">{item.label}</span>

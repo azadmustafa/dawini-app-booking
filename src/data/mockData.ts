@@ -1,4 +1,6 @@
 
+import { faker } from '@faker-js/faker/locale/ar';
+
 export interface DoctorCategory {
   id: string;
   name: string;
@@ -19,6 +21,11 @@ export interface Doctor {
   price: number;
   availableDates: string[];
   about: string;
+  bio?: string;
+  specializations?: string[];
+  languages?: string[];
+  education?: string[];
+  certificates?: string[];
 }
 
 export interface Appointment {
@@ -29,6 +36,37 @@ export interface Appointment {
   status: 'pending' | 'confirmed' | 'cancelled';
 }
 
+export interface User {
+  id: string;
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  password: string;
+  profileImage?: string;
+  role: 'patient' | 'doctor' | 'admin';
+}
+
+export interface Question {
+  id: string;
+  patientId: string;
+  category: string;
+  title: string;
+  content: string;
+  date: string;
+  status: 'pending' | 'answered';
+  answers: Answer[];
+}
+
+export interface Answer {
+  id: string;
+  doctorId: string;
+  doctorName: string;
+  doctorImage: string;
+  specialty: string;
+  content: string;
+  date: string;
+}
+
 // Doctor Categories
 export const categories: DoctorCategory[] = [
   {
@@ -36,156 +74,148 @@ export const categories: DoctorCategory[] = [
     name: "General",
     arabicName: "طب عام",
     icon: "stethoscope",
-    count: 42
+    count: 72
   },
   {
     id: "cat2",
     name: "Dentist",
     arabicName: "طب الأسنان",
     icon: "tooth",
-    count: 28
+    count: 65
   },
   {
     id: "cat3",
     name: "Ophthalmologist",
     arabicName: "طب العيون",
     icon: "eye",
-    count: 15
+    count: 48
   },
   {
     id: "cat4",
     name: "Pediatrician",
     arabicName: "طب الأطفال",
     icon: "baby",
-    count: 24
+    count: 57
   },
   {
     id: "cat5",
     name: "Cardiologist",
     arabicName: "طب القلب",
     icon: "heart-pulse",
-    count: 18
+    count: 42
   },
   {
     id: "cat6",
     name: "Dermatologist",
     arabicName: "طب الجلدية",
     icon: "allergens",
-    count: 21
+    count: 53
+  },
+  {
+    id: "cat7",
+    name: "Neurologist",
+    arabicName: "طب الأعصاب",
+    icon: "brain",
+    count: 38
+  },
+  {
+    id: "cat8",
+    name: "Orthopedic",
+    arabicName: "طب العظام",
+    icon: "bone",
+    count: 45
+  },
+  {
+    id: "cat9",
+    name: "Psychiatrist",
+    arabicName: "الطب النفسي",
+    icon: "brain",
+    count: 32
+  },
+  {
+    id: "cat10",
+    name: "Gynecologist",
+    arabicName: "طب النساء",
+    icon: "female",
+    count: 48
   }
 ];
 
-// Mock Doctors Data
-export const doctors: Doctor[] = [
-  {
-    id: "doc1",
-    name: "د. محمد عبدالله",
-    specialty: "طب عام",
-    rating: 4.8,
-    reviewCount: 124,
-    image: "/doctors/doctor1.jpg",
-    experience: 10,
-    location: "مستشفى المركز الطبي",
-    price: 150,
-    availableDates: [
-      "2025-05-14",
-      "2025-05-15",
-      "2025-05-16",
-      "2025-05-20"
-    ],
-    about: "الدكتور محمد عبدالله هو طبيب عام ذو خبرة تزيد عن 10 سنوات في مجالات صحة الأسرة والرعاية الأولية والطب الوقائي. تخرج من كلية الطب بجامعة القاهرة وأكمل تدريبه في مستشفى المركز الطبي."
-  },
-  {
-    id: "doc2",
-    name: "د. سارة الأحمد",
-    specialty: "طب الأسنان",
-    rating: 4.9,
-    reviewCount: 87,
-    image: "/doctors/doctor2.jpg",
-    experience: 8,
-    location: "عيادة الأسنان المتقدمة",
-    price: 200,
-    availableDates: [
-      "2025-05-14",
-      "2025-05-17",
-      "2025-05-18",
-      "2025-05-19"
-    ],
-    about: "الدكتورة سارة الأحمد هي طبيبة أسنان متخصصة في علاج وتجميل الأسنان. لديها خبرة 8 سنوات في مجال طب الأسنان التجميلي وتقويم الأسنان."
-  },
-  {
-    id: "doc3",
-    name: "د. أحمد محمود",
-    specialty: "طب العيون",
-    rating: 4.7,
-    reviewCount: 56,
-    image: "/doctors/doctor3.jpg",
-    experience: 12,
-    location: "مركز النور للعيون",
-    price: 250,
-    availableDates: [
-      "2025-05-15",
-      "2025-05-16",
-      "2025-05-17",
-      "2025-05-21"
-    ],
-    about: "الدكتور أحمد محمود طبيب عيون متخصص في جراحة الليزك وعلاج أمراض العيون المختلفة. خريج كلية الطب بجامعة عين شمس ولديه خبرة 12 عامًا في مجال طب وجراحة العيون."
-  },
-  {
-    id: "doc4",
-    name: "د. ليلى خالد",
-    specialty: "طب الأطفال",
-    rating: 4.9,
-    reviewCount: 143,
-    image: "/doctors/doctor4.jpg",
-    experience: 15,
-    location: "مستشفى الأطفال التخصصي",
-    price: 180,
-    availableDates: [
-      "2025-05-14",
-      "2025-05-16",
-      "2025-05-18",
-      "2025-05-20"
-    ],
-    about: "الدكتورة ليلى خالد هي استشارية طب أطفال حاصلة على الزمالة البريطانية في طب الأطفال. تتمتع بخبرة 15 عامًا في تشخيص وعلاج أمراض الأطفال المختلفة."
-  },
-  {
-    id: "doc5",
-    name: "د. خالد الصالح",
-    specialty: "طب القلب",
-    rating: 4.8,
-    reviewCount: 92,
-    image: "/doctors/doctor5.jpg",
-    experience: 14,
-    location: "مركز القلب التخصصي",
-    price: 300,
-    availableDates: [
-      "2025-05-15",
-      "2025-05-17",
-      "2025-05-19",
-      "2025-05-21"
-    ],
-    about: "الدكتور خالد الصالح هو استشاري أمراض القلب والأوعية الدموية. حاصل على الزمالة الأمريكية في أمراض القلب ولديه خبرة 14 عامًا في تشخيص وعلاج أمراض القلب المختلفة."
-  },
-  {
-    id: "doc6",
-    name: "د. نورا سعيد",
-    specialty: "طب الجلدية",
-    rating: 4.7,
-    reviewCount: 78,
-    image: "/doctors/doctor6.jpg",
-    experience: 9,
-    location: "عيادة الجلدية المتخصصة",
-    price: 220,
-    availableDates: [
-      "2025-05-14",
-      "2025-05-16",
-      "2025-05-18",
-      "2025-05-20"
-    ],
-    about: "الدكتورة نورا سعيد متخصصة في أمراض الجلد والتجميل. حاصلة على دكتوراه في أمراض الجلد من جامعة الإسكندرية ولديها خبرة 9 سنوات في مجال العناية بالبشرة والعلاجات التجميلية المتقدمة."
+// Generate random doctors (500)
+function generateRandomDoctors(count: number): Doctor[] {
+  const specialties = categories.map(cat => cat.arabicName);
+  const randomDoctors: Doctor[] = [];
+
+  for (let i = 0; i < count; i++) {
+    const specialtyIndex = faker.number.int({ min: 0, max: specialties.length - 1 });
+    const specialty = specialties[specialtyIndex];
+    
+    // Generate 3-5 random dates in the next 30 days
+    const availableDates: string[] = [];
+    const numDates = faker.number.int({ min: 3, max: 5 });
+    const today = new Date();
+    
+    for (let j = 0; j < numDates; j++) {
+      const futureDate = new Date();
+      futureDate.setDate(today.getDate() + faker.number.int({ min: 1, max: 30 }));
+      availableDates.push(futureDate.toISOString().split('T')[0]);
+    }
+
+    // Create languages array
+    const langCount = faker.number.int({ min: 1, max: 3 });
+    const languages = [];
+    const possibleLangs = ["العربية", "الإنجليزية", "الفرنسية", "الألمانية", "الإسبانية"];
+    for (let l = 0; l < langCount; l++) {
+      languages.push(possibleLangs[faker.number.int({ min: 0, max: possibleLangs.length - 1 })]);
+    }
+
+    // Create specializations
+    const specCount = faker.number.int({ min: 1, max: 4 });
+    const specializations = [];
+    for (let s = 0; s < specCount; s++) {
+      specializations.push(faker.medicine.medicinalName());
+    }
+
+    // Create education background
+    const education = [
+      `بكالوريوس في ${specialty} من جامعة ${faker.location.city()}`,
+      `${faker.helpers.maybe(() => `ماجستير في ${faker.medicine.medicinalName()} من جامعة ${faker.location.city()}`, { probability: 0.6 })}`
+    ].filter(Boolean);
+
+    // Create certificates
+    const certCount = faker.number.int({ min: 0, max: 3 });
+    const certificates = [];
+    for (let c = 0; c < certCount; c++) {
+      certificates.push(`شهادة في ${faker.medicine.medicinalName()} (${2010 + faker.number.int({ min: 0, max: 13 })})`);
+    }
+
+    const doctor: Doctor = {
+      id: `doc${i + 1}`,
+      name: `د. ${faker.person.fullName()}`,
+      specialty,
+      rating: Number(faker.finance.amount({ min: 3.5, max: 5, dec: 1 })),
+      reviewCount: faker.number.int({ min: 5, max: 300 }),
+      image: `/doctors/doctor${(i % 6) + 1}.jpg`,
+      experience: faker.number.int({ min: 1, max: 30 }),
+      location: `${faker.helpers.arrayElement(['عيادة', 'مستشفى', 'مركز'])} ${faker.company.name()}`,
+      price: faker.helpers.arrayElement([100, 150, 200, 250, 300, 350, 400, 450, 500]),
+      availableDates,
+      about: faker.lorem.paragraph({ min: 2, max: 4 }),
+      bio: faker.lorem.paragraph(),
+      specializations,
+      languages,
+      education: education as string[],
+      certificates
+    };
+
+    randomDoctors.push(doctor);
   }
-];
+
+  return randomDoctors;
+}
+
+// Generate 500 random doctors
+export const doctors: Doctor[] = generateRandomDoctors(500);
 
 // Time slots for appointments
 export const timeSlots = [
@@ -207,6 +237,62 @@ export const timeSlots = [
   "4:30 مساءً",
   "5:00 مساءً",
   "5:30 مساءً"
+];
+
+// Mock users
+export const users: User[] = [
+  {
+    id: 'user1',
+    fullName: 'أحمد خالد',
+    email: 'ahmed@example.com',
+    phoneNumber: '05XXXXXXXX',
+    password: 'password123',
+    profileImage: '/profile/avatar1.jpg',
+    role: 'patient'
+  },
+  {
+    id: 'user2',
+    fullName: 'سارة محمد',
+    email: 'sara@example.com',
+    phoneNumber: '05XXXXXXXX',
+    password: 'password123',
+    profileImage: '/profile/avatar2.jpg',
+    role: 'patient'
+  }
+];
+
+// Mock questions
+export const questions: Question[] = [
+  {
+    id: 'q1',
+    patientId: 'user1',
+    category: 'طب عام',
+    title: 'أعاني من صداع مستمر منذ أسبوع',
+    content: 'أعاني من صداع مستمر في الجانب الأيمن من الرأس منذ أسبوع تقريباً، هل هذا يستدعي زيارة الطبيب أم يمكن علاجه بالمسكنات؟',
+    date: '2025-05-10',
+    status: 'answered',
+    answers: [
+      {
+        id: 'a1',
+        doctorId: 'doc1',
+        doctorName: doctors[0].name,
+        doctorImage: doctors[0].image,
+        specialty: doctors[0].specialty,
+        content: 'إذا كان الصداع مستمراً لمدة أسبوع فينصح بزيارة الطبيب لتقييم الحالة، خاصة إذا كان في جهة واحدة من الرأس. قد تحتاج لفحوصات إضافية لتحديد السبب.',
+        date: '2025-05-11'
+      }
+    ]
+  },
+  {
+    id: 'q2',
+    patientId: 'user2',
+    category: 'طب الأسنان',
+    title: 'ألم في ضرس العقل',
+    content: 'بدأت أشعر بألم في منطقة ضرس العقل العلوي، وأحياناً ينتشر الألم إلى الأذن. هل يجب خلع الضرس أم هناك علاجات أخرى؟',
+    date: '2025-05-12',
+    status: 'pending',
+    answers: []
+  }
 ];
 
 // Initial empty appointments array
@@ -233,4 +319,54 @@ export const getAppointmentsByDoctorId = (doctorId: string) => {
 // Function to get a doctor by id
 export const getDoctorById = (id: string) => {
   return doctors.find(doctor => doctor.id === id);
+};
+
+// Function to add new question
+export const addQuestion = (patientId: string, category: string, title: string, content: string): Question => {
+  const newQuestion: Question = {
+    id: `q-${Date.now()}`,
+    patientId,
+    category,
+    title,
+    content,
+    date: new Date().toISOString().split('T')[0],
+    status: 'pending',
+    answers: []
+  };
+  
+  return newQuestion;
+};
+
+// Function to add answer to question
+export const addAnswer = (questionId: string, doctorId: string, content: string): Answer | null => {
+  const doctor = getDoctorById(doctorId);
+  if (!doctor) return null;
+  
+  const newAnswer: Answer = {
+    id: `a-${Date.now()}`,
+    doctorId,
+    doctorName: doctor.name,
+    doctorImage: doctor.image,
+    specialty: doctor.specialty,
+    content,
+    date: new Date().toISOString().split('T')[0],
+  };
+  
+  return newAnswer;
+};
+
+// Authentication functions
+export const login = (email: string, password: string): User | null => {
+  const user = users.find(u => u.email === email && u.password === password);
+  return user || null;
+};
+
+export const register = (userData: Omit<User, 'id'>): User => {
+  const newUser: User = {
+    id: `user-${Date.now()}`,
+    ...userData
+  };
+  
+  users.push(newUser);
+  return newUser;
 };
