@@ -80,7 +80,7 @@ export const categories: DoctorCategory[] = [
     id: "cat2",
     name: "Dentist",
     arabicName: "طب الأسنان",
-    icon: "tooth",
+    icon: "activity", // Changed from "tooth" to an available icon
     count: 65
   },
   {
@@ -172,21 +172,22 @@ function generateRandomDoctors(count: number): Doctor[] {
     // Create specializations
     const specCount = faker.number.int({ min: 1, max: 4 });
     const specializations = [];
+    // Using science instead of medicine namespace for faker
     for (let s = 0; s < specCount; s++) {
-      specializations.push(faker.medicine.medicinalName());
+      specializations.push(faker.science.chemicalElement().name);
     }
 
     // Create education background
     const education = [
       `بكالوريوس في ${specialty} من جامعة ${faker.location.city()}`,
-      `${faker.helpers.maybe(() => `ماجستير في ${faker.medicine.medicinalName()} من جامعة ${faker.location.city()}`, { probability: 0.6 })}`
+      `${faker.helpers.maybe(() => `ماجستير في ${faker.science.chemicalElement().name} من جامعة ${faker.location.city()}`, { probability: 0.6 })}`
     ].filter(Boolean);
 
     // Create certificates
     const certCount = faker.number.int({ min: 0, max: 3 });
     const certificates = [];
     for (let c = 0; c < certCount; c++) {
-      certificates.push(`شهادة في ${faker.medicine.medicinalName()} (${2010 + faker.number.int({ min: 0, max: 13 })})`);
+      certificates.push(`شهادة في ${faker.science.chemicalElement().name} (${2010 + faker.number.int({ min: 0, max: 13 })})`);
     }
 
     const doctor: Doctor = {
@@ -275,9 +276,9 @@ export const questions: Question[] = [
       {
         id: 'a1',
         doctorId: 'doc1',
-        doctorName: doctors[0].name,
-        doctorImage: doctors[0].image,
-        specialty: doctors[0].specialty,
+        doctorName: 'د. طبيب افتراضي',
+        doctorImage: '/doctors/doctor1.jpg',
+        specialty: 'طب عام',
         content: 'إذا كان الصداع مستمراً لمدة أسبوع فينصح بزيارة الطبيب لتقييم الحالة، خاصة إذا كان في جهة واحدة من الرأس. قد تحتاج لفحوصات إضافية لتحديد السبب.',
         date: '2025-05-11'
       }
