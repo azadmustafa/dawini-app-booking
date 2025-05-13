@@ -1,7 +1,7 @@
 
 import { DoctorCategory } from '@/data/mockData';
 import { cn } from '@/lib/utils';
-import { Heart, Stethoscope, Tooth, Eye, Baby, HeartPulse } from 'lucide-react';
+import { Heart, Stethoscope, Eye, Baby, HeartPulse, Activity } from 'lucide-react';
 
 interface CategoryCardProps {
   category: DoctorCategory;
@@ -11,7 +11,7 @@ interface CategoryCardProps {
 
 const iconMap: Record<string, React.ElementType> = {
   stethoscope: Stethoscope,
-  tooth: Tooth,
+  tooth: Activity, // تم تغيير Tooth إلى Activity لأن Tooth غير موجود في المكتبة
   eye: Eye,
   baby: Baby,
   'heart-pulse': HeartPulse,
