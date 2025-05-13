@@ -1,4 +1,3 @@
-
 import { faker } from '@faker-js/faker/locale/ar';
 
 export interface DoctorCategory {
@@ -141,6 +140,11 @@ export const categories: DoctorCategory[] = [
   }
 ];
 
+// Featured Doctors - Top 10 doctors with high ratings
+export const featuredDoctors = generateRandomDoctors(500)
+  .sort((a, b) => b.rating - a.rating)
+  .slice(0, 10);
+
 // Generate random doctors (500)
 function generateRandomDoctors(count: number): Doctor[] {
   const specialties = categories.map(cat => cat.arabicName);
@@ -240,6 +244,62 @@ export const timeSlots = [
   "5:30 مساءً"
 ];
 
+// Mock hospitals
+export interface Hospital {
+  id: string;
+  name: string;
+  image: string;
+  location: string;
+  specialties: string[];
+  doctorsCount: number;
+  rating: number;
+  description: string;
+}
+
+// Generate random hospitals
+export const hospitals: Hospital[] = Array.from({ length: 15 }, (_, i) => ({
+  id: `hospital${i + 1}`,
+  name: `مستشفى ${faker.company.name()}`,
+  image: `/doctors/doctor${(i % 6) + 1}.jpg`,
+  location: `${faker.location.city()}، المملكة العربية السعودية`,
+  specialties: Array.from(
+    { length: faker.number.int({ min: 3, max: 8 }) },
+    () => categories[faker.number.int({ min: 0, max: categories.length - 1 })].arabicName
+  ),
+  doctorsCount: faker.number.int({ min: 20, max: 200 }),
+  rating: Number(faker.finance.amount({ min: 3.5, max: 5, dec: 1 })),
+  description: faker.lorem.paragraph({ min: 2, max: 4 }),
+}));
+
+// Promotions and offers
+export interface Promotion {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  discount: string;
+  category: string;
+  validUntil: string;
+  code: string;
+}
+
+// Generate random promotions
+export const promotions: Promotion[] = Array.from({ length: 12 }, (_, i) => {
+  const categoryIndex = faker.number.int({ min: 0, max: categories.length - 1 });
+  return {
+    id: `promo${i + 1}`,
+    title: `عرض خاص على ${categories[categoryIndex].arabicName}`,
+    description: faker.lorem.sentence({ min: 5, max: 15 }),
+    image: `/doctors/doctor${(i % 6) + 1}.jpg`,
+    discount: `${faker.number.int({ min: 10, max: 50 })}%`,
+    category: categories[categoryIndex].arabicName,
+    validUntil: new Date(
+      Date.now() + faker.number.int({ min: 7, max: 60 }) * 24 * 60 * 60 * 1000
+    ).toISOString().split('T')[0],
+    code: faker.string.alphanumeric(6).toUpperCase(),
+  };
+});
+
 // Mock users
 export const users: User[] = [
   {
@@ -320,6 +380,11 @@ export const getAppointmentsByDoctorId = (doctorId: string) => {
 // Function to get a doctor by id
 export const getDoctorById = (id: string) => {
   return doctors.find(doctor => doctor.id === id);
+};
+
+// Function to get a hospital by id
+export const getHospitalById = (id: string) => {
+  return hospitals.find(hospital => hospital.id === id);
 };
 
 // Function to add new question

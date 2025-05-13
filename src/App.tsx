@@ -18,6 +18,9 @@ import RegisterPage from "./pages/RegisterPage";
 import QAPage from "./pages/QAPage";
 import QuestionDetailPage from "./pages/QuestionDetailPage";
 import MenuPage from "./pages/MenuPage";
+import HospitalPage from "./pages/HospitalPage";
+import HospitalsPage from "./pages/HospitalsPage";
+import PromotionsPage from "./pages/PromotionsPage";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +43,9 @@ const App = () => (
             <Route path="/qa" element={<QAPage />} />
             <Route path="/qa/:id" element={<QuestionDetailPage />} />
             <Route path="/menu" element={<MenuPage />} />
+            <Route path="/hospital/:id" element={<HospitalPage />} />
+            <Route path="/hospitals" element={<HospitalsPage />} />
+            <Route path="/promotions" element={<PromotionsPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

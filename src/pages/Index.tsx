@@ -7,9 +7,14 @@ import SearchBar from "@/components/home/SearchBar";
 import CategoryCard from "@/components/home/CategoryCard";
 import DoctorCard from "@/components/doctors/DoctorCard";
 import { User } from "lucide-react";
+import { Link } from "react-router-dom";
+import AdvertisementCarousel from "@/components/home/AdvertisementCarousel";
+import FeaturedDoctors from "@/components/home/FeaturedDoctors";
+import HospitalsPreview from "@/components/home/HospitalsPreview";
+import PromotionsPreview from "@/components/home/PromotionsPreview";
 
 const Index = () => {
-  const { searchTerm, selectedCategory, setSelectedCategory } = useAppContext();
+  const { searchTerm, selectedCategory, setSelectedCategory, currentUser } = useAppContext();
   const [filteredDoctors, setFilteredDoctors] = useState(doctors);
 
   // Filter doctors based on search term and selected category
@@ -48,18 +53,40 @@ const Index = () => {
       <div className="pt-6 pb-3 px-4 bg-white shadow-sm">
         <div className="flex justify-between items-center mb-4">
           <div>
-            <h1 className="text-xl font-bold">مرحبًا بك 👋</h1>
+            <h1 className="text-xl font-bold">
+              {currentUser 
+                ? `مرحباً ${currentUser.fullName.split(' ')[0]} 👋` 
+                : "مرحبًا بك 👋"}
+            </h1>
             <p className="text-gray-600 text-sm">دعنا نساعدك في حجز موعد طبي</p>
           </div>
-          <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full">
-            <User className="h-5 w-5 text-gray-500" />
-          </div>
+          <Link to="/profile" className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full">
+            {currentUser && currentUser.profileImage ? (
+              <img 
+                src={currentUser.profileImage} 
+                alt={currentUser.fullName} 
+                className="w-full h-full rounded-full object-cover"
+              />
+            ) : (
+              <User className="h-5 w-5 text-gray-500" />
+            )}
+          </Link>
         </div>
         <SearchBar />
       </div>
       
-      {/* Categories */}
-      <div className="px-4 py-5">
+      {/* Advertisement Carousel */}
+      <div className="mt-4 px-4">
+        <AdvertisementCarousel />
+      </div>
+      
+      {/* Featured Doctors */}
+      <div className="px-4 pt-5">
+        <FeaturedDoctors />
+      </div>
+      
+      {/* Medical Categories */}
+      <div className="px-4 py-4">
         <h2 className="text-lg font-bold mb-3">التخصصات الطبية</h2>
         <div className="grid grid-cols-3 gap-3">
           {categories.map((category) => (
@@ -72,22 +99,59 @@ const Index = () => {
           ))}
         </div>
       </div>
+
+      {/* Hospitals Preview */}
+      <div className="px-4 py-2">
+        <HospitalsPreview />
+      </div>
       
-      {/* Top Doctors */}
+      {/* Promotions Preview */}
+      <div className="px-4 py-2">
+        <PromotionsPreview />
+      </div>
+      
+      {/* Doctors */}
       <div className="px-4 pb-6">
-        <h2 className="text-lg font-bold mb-3">
-          {selectedCategory 
-            ? `${categories.find(c => c.id === selectedCategory)?.arabicName}`
-            : filteredDoctors.length === doctors.length
-            ? "أطباء مميزون"
-            : "نتائج البحث"
-          }
-        </h2>
+        <div className="flex justify-between items-center mb-3">
+          <h2 className="text-lg font-bold">
+            {selectedCategory 
+              ? `${categories.find(c => c.id === selectedCategory)?.arabicName}`
+              : "أطباء متميزون"
+            }
+          </h2>
+          {filteredDoctors.length > 5 && (
+            <Link to="/search" className="text-sm text-medical-500">
+              عرض الكل
+            </Link>
+          )}
+        </div>
         
         {filteredDoctors.length > 0 ? (
-          <div className="grid grid-cols-1 gap-4">
-            {filteredDoctors.map((doctor) => (
-              <DoctorCard key={doctor.id} doctor={doctor} />
+          <div className="grid grid-cols-2 gap-3">
+            {filteredDoctors.slice(0, 6).map((doctor) => (
+              <Link to={`/doctor/${doctor.id}`} key={doctor.id} className="block">
+                <div className="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100">
+                  <div className="h-28 bg-gray-100">
+                    <img
+                      src={doctor.image}
+                      alt={doctor.name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.onerror = null;
+                        target.src = "https://via.placeholder.com/150x150?text=طبيب";
+                      }}
+                    />
+                  </div>
+                  <div className="p-2">
+                    <h3 className="font-bold text-sm line-clamp-1">{doctor.name}</h3>
+                    <p className="text-xs text-gray-600 mb-1">{doctor.specialty}</p>
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-medical-600 font-bold">{doctor.price} ر.س</span>
+                    </div>
+                  </div>
+                </div>
+              </Link>
             ))}
           </div>
         ) : (

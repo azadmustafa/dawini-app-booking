@@ -19,6 +19,7 @@ const BookingPage = () => {
   const [doctor, setDoctor] = useState(selectedDoctor || (id ? getDoctorById(id) : null));
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -59,13 +60,22 @@ const BookingPage = () => {
     }
 
     try {
-      addAppointment(doctor.id, selectedDate, selectedTime);
-      toast({
-        title: "تم الحجز بنجاح",
-        description: `تم حجز موعد مع ${doctor.name} في ${selectedDate} - ${selectedTime}`,
-      });
-      navigate('/appointments');
+      setIsSubmitting(true);
+      
+      // Simulate a server delay
+      setTimeout(() => {
+        addAppointment(doctor.id, selectedDate, selectedTime);
+        
+        toast({
+          title: "تم الحجز بنجاح",
+          description: `تم حجز موعد مع ${doctor.name} في ${selectedDate} - ${selectedTime}`,
+        });
+        
+        navigate('/appointments');
+      }, 1000);
+      
     } catch (error) {
+      setIsSubmitting(false);
       toast({
         title: "خطأ",
         description: "حدث خطأ أثناء حجز الموعد",
@@ -185,10 +195,10 @@ const BookingPage = () => {
           </div>
           <Button 
             onClick={handleConfirmBooking}
-            disabled={!selectedDate || !selectedTime}
-            className="w-full bg-medical-500 hover:bg-medical-600 text-white py-6 disabled:bg-gray-300"
+            disabled={!selectedDate || !selectedTime || isSubmitting}
+            className={`w-full bg-medical-500 hover:bg-medical-600 text-white py-6 disabled:bg-gray-300 ${isSubmitting ? 'opacity-80' : ''}`}
           >
-            تأكيد الحجز
+            {isSubmitting ? 'جاري تأكيد الحجز...' : 'تأكيد الحجز'}
           </Button>
         </div>
       </div>

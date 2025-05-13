@@ -16,9 +16,13 @@ import {
   LogIn,
   Heart,
   FileText,
-  Pill
+  Pill,
+  Building2,
+  Tag
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 
 interface MenuItemProps {
   icon: React.ReactNode;
@@ -43,13 +47,19 @@ const MenuPage = () => {
   const { isAuthenticated, logout, currentUser } = useAppContext();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
 
   const handleLogout = () => {
+    setLogoutDialogOpen(true);
+  };
+
+  const confirmLogout = () => {
     logout();
     toast({
       title: "تم تسجيل الخروج بنجاح",
     });
     navigate('/');
+    setLogoutDialogOpen(false);
   };
 
   return (
@@ -111,6 +121,24 @@ const MenuPage = () => {
             title="الأسئلة والاستشارات"
             onClick={() => navigate('/qa')}
             color="text-medical-500"
+          />
+        </div>
+        
+        <div className="border rounded-lg mb-6">
+          <div className="border-b px-4 py-3">
+            <h3 className="font-medium text-sm text-gray-500">خدمات</h3>
+          </div>
+          
+          <MenuItem
+            icon={<Building2 size={20} />}
+            title="المشافي"
+            onClick={() => navigate('/hospitals')}
+          />
+          
+          <MenuItem
+            icon={<Tag size={20} />}
+            title="العروض والخصومات"
+            onClick={() => navigate('/promotions')}
           />
         </div>
         
@@ -218,6 +246,24 @@ const MenuPage = () => {
           </div>
         )}
       </div>
+
+      {/* Logout confirmation dialog */}
+      <AlertDialog open={logoutDialogOpen} onOpenChange={setLogoutDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>تسجيل الخروج</AlertDialogTitle>
+            <AlertDialogDescription>
+              هل أنت متأكد أنك تريد تسجيل الخروج من حسابك؟
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>إلغاء</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmLogout} className="bg-red-600 hover:bg-red-700 text-white">
+              تسجيل الخروج
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </PageContainer>
   );
 };
