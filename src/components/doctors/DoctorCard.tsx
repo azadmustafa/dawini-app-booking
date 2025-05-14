@@ -16,15 +16,21 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
       <div className="flex flex-col h-full">
         <div className="relative h-40 bg-gray-100">
           <img
-            src={doctor.image}
+            src={doctor.image || `/doctors/doctor${Math.floor(Math.random() * 6) + 1}.jpg`}
             alt={doctor.name}
             className="w-full h-full object-cover"
             onError={(e) => {
               const target = e.target as HTMLImageElement;
               target.onerror = null;
-              target.src = "https://via.placeholder.com/300x200?text=طبيب"; // Fallback image
+              // Fallback to one of our default doctor images
+              target.src = `/doctors/doctor${Math.floor(Math.random() * 6) + 1}.jpg`;
             }}
           />
+          {doctor.isOnline && (
+            <div className="absolute bottom-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
+              متاح الآن
+            </div>
+          )}
         </div>
         <div className="p-4 flex flex-col flex-1">
           <h3 className="font-bold text-lg mb-1">{doctor.name}</h3>
@@ -36,7 +42,7 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
           </div>
           <div className="flex items-center justify-between mt-auto">
             <span className="text-xs text-gray-500">{doctor.experience} سنوات خبرة</span>
-            <span className="text-medical-600 font-bold">{doctor.price} ر.س</span>
+            <span className="text-green-600 font-bold">{doctor.price} ر.س</span>
           </div>
         </div>
       </div>

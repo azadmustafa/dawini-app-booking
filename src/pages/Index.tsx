@@ -12,6 +12,8 @@ import AdvertisementCarousel from "@/components/home/AdvertisementCarousel";
 import FeaturedDoctors from "@/components/home/FeaturedDoctors";
 import HospitalsPreview from "@/components/home/HospitalsPreview";
 import PromotionsPreview from "@/components/home/PromotionsPreview";
+import OnlineDoctors from "@/components/home/OnlineDoctors";
+import FAQ from "@/components/home/FAQ";
 
 const Index = () => {
   const { searchTerm, selectedCategory, setSelectedCategory, currentUser } = useAppContext();
@@ -80,6 +82,11 @@ const Index = () => {
         <AdvertisementCarousel />
       </div>
       
+      {/* Online Doctors */}
+      <div className="px-4 pt-5">
+        <OnlineDoctors />
+      </div>
+      
       {/* Featured Doctors */}
       <div className="px-4 pt-5">
         <FeaturedDoctors />
@@ -120,7 +127,7 @@ const Index = () => {
             }
           </h2>
           {filteredDoctors.length > 5 && (
-            <Link to="/search" className="text-sm text-medical-500">
+            <Link to="/search" className="text-sm text-green-500">
               عرض الكل
             </Link>
           )}
@@ -133,21 +140,26 @@ const Index = () => {
                 <div className="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100">
                   <div className="h-28 bg-gray-100">
                     <img
-                      src={doctor.image}
+                      src={doctor.image || `/doctors/doctor${Math.floor(Math.random() * 6) + 1}.jpg`}
                       alt={doctor.name}
                       className="w-full h-full object-cover"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         target.onerror = null;
-                        target.src = "https://via.placeholder.com/150x150?text=طبيب";
+                        target.src = `/doctors/doctor${Math.floor(Math.random() * 6) + 1}.jpg`;
                       }}
                     />
+                    {doctor.isOnline && (
+                      <div className="absolute top-2 right-2 bg-green-500 text-white text-xs px-1 py-0.5 rounded-full">
+                        متاح
+                      </div>
+                    )}
                   </div>
                   <div className="p-2">
                     <h3 className="font-bold text-sm line-clamp-1">{doctor.name}</h3>
                     <p className="text-xs text-gray-600 mb-1">{doctor.specialty}</p>
                     <div className="flex justify-between items-center">
-                      <span className="text-xs text-medical-600 font-bold">{doctor.price} ر.س</span>
+                      <span className="text-xs text-green-600 font-bold">{doctor.price} ر.س</span>
                     </div>
                   </div>
                 </div>
@@ -159,6 +171,11 @@ const Index = () => {
             <p className="text-gray-500">لا توجد نتائج متطابقة مع بحثك</p>
           </div>
         )}
+      </div>
+      
+      {/* FAQ Section */}
+      <div className="px-4 py-6 bg-white border-t">
+        <FAQ />
       </div>
     </PageContainer>
   );

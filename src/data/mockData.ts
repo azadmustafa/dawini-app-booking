@@ -25,6 +25,7 @@ export interface Doctor {
   languages?: string[];
   education?: string[];
   certificates?: string[];
+  isOnline?: boolean;
 }
 
 export interface Appointment {
@@ -64,6 +65,18 @@ export interface Answer {
   specialty: string;
   content: string;
   date: string;
+}
+
+export interface Promotion {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  discount: string;
+  category: string;
+  validUntil: string;
+  code: string;
+  doctorId: string;
 }
 
 // Doctor Categories
@@ -140,11 +153,6 @@ export const categories: DoctorCategory[] = [
   }
 ];
 
-// Featured Doctors - Top 10 doctors with high ratings
-export const featuredDoctors = generateRandomDoctors(500)
-  .sort((a, b) => b.rating - a.rating)
-  .slice(0, 10);
-
 // Generate random doctors (500)
 function generateRandomDoctors(count: number): Doctor[] {
   const specialties = categories.map(cat => cat.arabicName);
@@ -210,7 +218,8 @@ function generateRandomDoctors(count: number): Doctor[] {
       specializations,
       languages,
       education: education as string[],
-      certificates
+      certificates,
+      isOnline: Math.random() < 0.1 // ~10% of doctors are online
     };
 
     randomDoctors.push(doctor);
@@ -221,6 +230,11 @@ function generateRandomDoctors(count: number): Doctor[] {
 
 // Generate 500 random doctors
 export const doctors: Doctor[] = generateRandomDoctors(500);
+
+// Featured Doctors - Top 10 doctors with high ratings
+export const featuredDoctors = doctors
+  .sort((a, b) => b.rating - a.rating)
+  .slice(0, 10);
 
 // Time slots for appointments
 export const timeSlots = [
@@ -271,21 +285,11 @@ export const hospitals: Hospital[] = Array.from({ length: 15 }, (_, i) => ({
   description: faker.lorem.paragraph({ min: 2, max: 4 }),
 }));
 
-// Promotions and offers
-export interface Promotion {
-  id: string;
-  title: string;
-  description: string;
-  image: string;
-  discount: string;
-  category: string;
-  validUntil: string;
-  code: string;
-}
-
 // Generate random promotions
 export const promotions: Promotion[] = Array.from({ length: 12 }, (_, i) => {
   const categoryIndex = faker.number.int({ min: 0, max: categories.length - 1 });
+  const randomDoctorId = `doc${faker.number.int({ min: 1, max: 500 })}`;
+  
   return {
     id: `promo${i + 1}`,
     title: `عرض خاص على ${categories[categoryIndex].arabicName}`,
@@ -297,6 +301,7 @@ export const promotions: Promotion[] = Array.from({ length: 12 }, (_, i) => {
       Date.now() + faker.number.int({ min: 7, max: 60 }) * 24 * 60 * 60 * 1000
     ).toISOString().split('T')[0],
     code: faker.string.alphanumeric(6).toUpperCase(),
+    doctorId: randomDoctorId
   };
 });
 
